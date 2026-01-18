@@ -1,0 +1,41 @@
+============================================================
+                TRANS_017 - File Transfer Script            
+============================================================
+Log File: /ifs/igc/folders/ADA/SHARED/projects/BSSantos/TRANS_017/workflow/ZZ_logs/20260109_132802_FileTransfer.out
+~~~ File Transfer - Feature Barcode ~~~~
+Feature Barcode - Starting rsync transfer at 2026-01-09_13:28:02
+sending incremental file list
+
+sent 1,586 bytes  received 16 bytes  3,204.00 bytes/sec
+total size is 150,240,043,092  speedup is 93,782,798.43
+Feature Barcode - Transfer completed with exit status: 0
+Feature Barcode - Finished at 2026-01-09_13:28:02
+
+~~~ File Transfer - Gene Expression ~~~~
+Gene Expression - Starting rsync transfer at 2026-01-09_13:28:02
+sending incremental file list
+GEX_1/
+GEX_1/GEX_1-SCI7T081-SCI5T081_233L3JLT4_S1_L007_I1_001.fastq.gz
+GEX_1/GEX_1-SCI7T081-SCI5T081_233L3JLT4_S1_L007_I2_001.fastq.gz
+GEX_1/GEX_1-SCI7T081-SCI5T081_233L3JLT4_S1_L007_R1_001.fastq.gz
+GEX_1/GEX_1-SCI7T081-SCI5T081_233L3JLT4_S1_L007_R2_001.fastq.gz
+GEX_1/GEX_1-SCI7T081-SCI5T081_233L3JLT4_S1_L008_I1_001.fastq.gz
+GEX_1/GEX_1-SCI7T081-SCI5T081_233L3JLT4_S1_L008_I2_001.fastq.gz
+GEX_1/GEX_1-SCI7T081-SCI5T081_233L3JLT4_S1_L008_R1_001.fastq.gz
+GEX_1/GEX_1-SCI7T081-SCI5T081_233L3JLT4_S1_L008_R2_001.fastq.gz
+GEX_1/MD5.txt
+GEX_2/
+GEX_2/GEX_2-SCI7T082-SCI5T082_233L3JLT4_S2_L007_I1_001.fastq.gz
+GEX_2/GEX_2-SCI7T082-SCI5T082_233L3JLT4_S2_L007_I2_001.fastq.gz
+GEX_2/GEX_2-SCI7T082-SCI5T082_233L3JLT4_S2_L007_R1_001.fastq.gz
+GEX_2/GEX_2-SCI7T082-SCI5T082_233L3JLT4_S2_L007_R2_001.fastq.gz
+GEX_2/GEX_2-SCI7T082-SCI5T082_233L3JLT4_S2_L008_I1_001.fastq.gz
+GEX_2/GEX_2-SCI7T082-SCI5T082_233L3JLT4_S2_L008_I2_001.fastq.gz
+GEX_2/GEX_2-SCI7T082-SCI5T082_233L3JLT4_S2_L008_R1_001.fastq.gz
+GEX_2/GEX_2-SCI7T082-SCI5T082_233L3JLT4_S2_L008_R2_001.fastq.gz
+GEX_2/MD5.txt
+GEX_3/
+GEX_3/GEX_3-SCI7T083-SCI5T083_233L3JLT4_S3_L007_I1_001.fastq.gz
+GEX_3/GEX_3-SCI7T083-SCI5T083_233L3JLT4_S3_L007_I2_001.fastq.gz
+GEX_3/GEX_3-SCI7T083-SCI5T083_233L3JLT4_S3_L007_R1_001.fastq.gz
+GEX_3/GEX_3-SCI7T083-SCI5T083_233L3JLT4_S3_L007_R2_001.fastq.gz

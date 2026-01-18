@@ -1,0 +1,156 @@
+Bootstrap: docker
+From: ubuntu:20.04
+
+%labels
+    Author Andre Barros
+    Version 1.0
+    Description Container for souporcell - genotype-based demultiplexing for single-cell RNA-seq
+
+%help
+    This container provides souporcell for demultiplexing pooled scRNA-seq samples by genotype.
+    
+    Usage:
+        singularity exec souporcell.sif souporcell_pipeline.py [options]
+    
+    Installed tools:
+        - souporcell
+        - minimap2
+        - samtools
+        - bcftools
+        - freebayes
+        - vartrix
+        - bedtools
+        - Python 3.8 with required packages
+
+%post
+    export DEBIAN_FRONTEND=noninteractive
+    
+    # Update and install system dependencies
+    apt-get update && apt-get install -y --no-install-recommends \
+        wget \
+        git \
+        build-essential \
+        cmake \
+        zlib1g-dev \
+        libbz2-dev \
+        liblzma-dev \
+        libcurl4-openssl-dev \
+        libssl-dev \
+        libncurses5-dev \
+        python3 \
+        python3-pip \
+        python3-dev \
+        autoconf \
+        automake \
+        libtool \
+        pkg-config \
+        bedtools \
+        vcftools \
+        parallel \
+        ca-certificates
+    
+    # Create installation directory
+    mkdir -p /opt/souporcell
+    cd /opt/souporcell
+    
+    # [FIX] Upgrade pip/setuptools and install PyVCF from git first
+    pip3 install --no-cache-dir --upgrade pip "setuptools<58" wheel    
+    pip3 install git+https://github.com/jamescasbon/PyVCF.git
+    
+    # Install other Python packages
+    pip3 install --no-cache-dir \
+        numpy \
+        scipy \
+        pandas \
+        pysam \
+        pystan==2.19.1.1 \
+        pyfaidx \
+        scikit-learn
+    
+    # Install minimap2
+    cd /opt
+    git clone https://github.com/lh3/minimap2
+    cd minimap2 && make
+    ln -s /opt/minimap2/minimap2 /usr/local/bin/minimap2
+    
+    # Install samtools
+    cd /opt
+    wget https://github.com/samtools/samtools/releases/download/1.17/samtools-1.17.tar.bz2
+    tar -xjf samtools-1.17.tar.bz2
+    cd samtools-1.17
+    ./configure --prefix=/usr/local
+    make && make install
+    cd /opt && rm samtools-1.17.tar.bz2
+    
+    # Install bcftools
+    cd /opt
+    wget https://github.com/samtools/bcftools/releases/download/1.17/bcftools-1.17.tar.bz2
+    tar -xjf bcftools-1.17.tar.bz2
+    cd bcftools-1.17
+    ./configure --prefix=/usr/local
+    make && make install
+    cd /opt && rm bcftools-1.17.tar.bz2
+    
+    # Install htslib
+    cd /opt
+    wget https://github.com/samtools/htslib/releases/download/1.17/htslib-1.17.tar.bz2
+    tar -xjf htslib-1.17.tar.bz2
+    cd htslib-1.17
+    ./configure --prefix=/usr/local
+    make && make install
+    cd /opt && rm htslib-1.17.tar.bz2
+    
+    # Install freebayes
+    cd /usr/local/bin
+    wget https://github.com/freebayes/freebayes/releases/download/v1.3.6/freebayes-1.3.6-linux-amd64-static.gz
+    gunzip freebayes-1.3.6-linux-amd64-static.gz
+    mv freebayes-1.3.6-linux-amd64-static freebayes
+    chmod +x freebayes
+    
+    # Install vartrix
+    cd /opt
+    wget https://github.com/10XGenomics/vartrix/releases/download/v1.1.22/vartrix_linux
+    chmod +x vartrix_linux
+    mv vartrix_linux /usr/local/bin/vartrix
+    
+    # Install souporcell
+    cd /opt
+    git clone https://github.com/wheaton5/souporcell.git
+    cd souporcell
+    
+    # Create wrapper script
+    cat > /usr/local/bin/souporcell_pipeline.py <<'EOF'
+#!/usr/bin/env python3
+import sys
+import os
+sys.path.insert(0, '/opt/souporcell')
+from souporcell_pipeline import main
+if __name__ == '__main__':
+    main()
+EOF
+    chmod +x /usr/local/bin/souporcell_pipeline.py
+    
+    # Clean up
+    apt-get clean
+    rm -rf /var/lib/apt/lists/*
+    
+    echo "Souporcell container build complete!"
+    echo "Python version:"
+    python3 --version
+    echo "minimap2 version:"
+    minimap2 --version
+    echo "samtools version:"
+    samtools --version | head -1
+    echo "bcftools version:"
+    bcftools --version | head -1
+    echo "freebayes version:"
+    freebayes --version
+
+%environment
+    export LC_ALL=C
+    export PATH=/usr/local/bin:/opt/minimap2:/opt/freebayes/bin:$PATH
+    export PYTHONPATH=/opt/souporcell:$PYTHONPATH
+
+%runscript
+    echo "Souporcell container for genotype-based demultiplexing"
+    exec "$@"
